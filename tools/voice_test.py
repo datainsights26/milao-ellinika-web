@@ -28,7 +28,12 @@ for eng in ["mms", "espeak"]:
     scores = []
     for i, w in enumerate(words):
         f = f"samples/{eng}-{i}.wav"
-        segs, info = asr.transcribe(f, language="el", beam_size=5)
+        sr, a = wavfile.read(f)
+        a = a.astype(np.float32) / 32768.0
+        if a.ndim > 1: a = a.mean(axis=1)
+        from scipy.signal import resample_poly
+        a = resample_poly(a, 16000, sr).astype(np.float32)
+        segs, info = asr.transcribe(a, language="el", beam_size=5)
         text = " ".join(s.text for s in segs).strip()
         with wave.open(f) as x:
             dur = x.getnframes() / x.getframerate()
