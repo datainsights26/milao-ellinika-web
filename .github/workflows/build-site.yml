@@ -32,8 +32,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: audio-cache
-          key: audio-${{ hashFiles('phrases.json', 'tools/gen_audio.py') }}
-          restore-keys: audio-
+          key: audio-v2-${{ hashFiles('phrases.json', 'tools/gen_audio.py') }}
+          restore-keys: audio-v2-
 
       - name: Install Piper and ffmpeg
         run: |
