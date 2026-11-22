@@ -126,7 +126,7 @@ footer{color:var(--mute);font-size:13px;margin-top:32px}
   <div class="tabs" role="tablist" id="tabs"></div>
   <section id="panel"></section>
   <p style="margin-top:28px"><button class="btn ghost" data-act="diag">Sound or microphone not working? Run a check</button></p>
-  <footer>Phrases and dialogues written for this app, following the book's lesson topics. The book's own recordings are at deltos.gr/downloads. Audio and speech marking use your device's Greek voice and speech recognition.</footer>
+  <footer><b>Version 6</b> · Phrases and dialogues written for this app, following the book's lesson topics. The book's own recordings are at deltos.gr/downloads. Audio and speech marking use your device's Greek voice and speech recognition.</footer>
 </main>
 <div class="toast" id="toast"></div>
 <script>
@@ -181,6 +181,7 @@ const MORE=[{"L": 8, "gr": "Ψηλός ή κοντός;", "en": "Describing peop
  src.forEach(u=>u.items.forEach(it=>{if(sg.has(it[0])||se.has(it[2]))return;sg.add(it[0]);se.add(it[2]);items.push(it)}));
  U.push({L,gr,en:'Revision: Lessons '+r,lead:'A mixed quiz on everything from Lessons '+r+'.',rev:src.map(u=>u.L),items})});
 U.sort((a,b)=>a.L-b.L);U.forEach(u=>u.id='L'+u.L);
+const APPV='6';
 const TABS=[['learn','Learn'],['quiz','Quiz'],['speak','Speak'],['write','Write'],['notes','Notes']];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -344,7 +345,7 @@ function vNotes(u){const others=U.map((x,i)=>[x,i]).filter(([x,i])=>i!==S.unit&&
 function vCheck(){let voices=[];try{voices=speechSynthesis.getVoices()}catch(e){}
  const gv=voices.filter(v=>/^el/i.test(v.lang)).map(v=>v.name+' ('+v.lang+(v.localService===false?', online':'')+')');
  const standalone=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches));
- const rows=[['Device',IOS?'iPhone / iPad':/Android/.test(navigator.userAgent)?'Android':'Computer'],['Browser',navigator.userAgent.replace(/^Mozilla\/5.0 /,'')],
+ const rows=[['App version',APPV],['Device',IOS?'iPhone / iPad':/Android/.test(navigator.userAgent)?'Android':'Computer'],['Browser',navigator.userAgent.replace(/^Mozilla\/5.0 /,'')],
   ['Opened from Home Screen',standalone?'yes':'no'],['Speech voice support',('speechSynthesis' in window)?'yes':'no'],['Voices found',String(voices.length)],
   ['Greek voices',gv.length?gv.join(', '):'none'],['Speech recognition',SR?'yes':'no'],['Last sound error',lastTTSerr||'none'],['Mic message',micMsg||'none']];
  window._diag=rows.map(r=>r[0]+': '+r[1]).join('\n');

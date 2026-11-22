@@ -1,10 +1,10 @@
 // Keeps the course working offline after the first visit.
-const CACHE = 'milao-v5';
+const CACHE = 'milao-v6';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',  "fonts/commissioner-greek-400-normal.woff2",  "fonts/commissioner-greek-500-normal.woff2",  "fonts/commissioner-greek-600-normal.woff2",  "fonts/commissioner-greek-700-normal.woff2",  "fonts/commissioner-latin-400-normal.woff2",  "fonts/commissioner-latin-500-normal.woff2",  "fonts/commissioner-latin-600-normal.woff2",  "fonts/commissioner-latin-700-normal.woff2",  "fonts/literata-greek-500-normal.woff2",  "fonts/literata-greek-600-normal.woff2",  "fonts/literata-latin-500-normal.woff2",  "fonts/literata-latin-600-normal.woff2"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))); self.clients.claim(); });
 // Network first so updates show up; fall back to the saved copy when offline.
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(fetch(e.request).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); return r; }).catch(() => caches.match(e.request, { ignoreSearch: true })));
+  e.respondWith(fetch(e.request, { cache: 'no-cache' }).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); return r; }).catch(() => caches.match(e.request, { ignoreSearch: true })));
 });
