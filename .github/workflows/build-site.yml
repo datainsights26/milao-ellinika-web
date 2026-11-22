@@ -52,10 +52,13 @@ jobs:
         run: python tools/gen_audio.py voice/el_GR-rapunzelina-low.onnx audio-cache
 
       - name: Assemble the site
+        env:
+          USE_AUDIO: "no"
         run: |
           mkdir _site
           rsync -a --exclude .git --exclude .github --exclude tools --exclude voice --exclude audio-cache --exclude _site --exclude phrases.json ./ _site/
           mkdir _site/audio
+          [ "${USE_AUDIO:-no}" = yes ] || { echo 'Recorded audio paused'; rmdir _site/audio; exit 0; }
           for id in $(python -c "import json;print(' '.join(p['id'] for p in json.load(open('phrases.json'))))"); do cp "audio-cache/$id.mp3" _site/audio/; done
           du -sh _site _site/audio
 

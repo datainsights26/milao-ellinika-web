@@ -208,6 +208,7 @@ async function nativeSay(lines,rate,onEach){const tok=++sayTok;try{await NTTS.st
   try{await NTTS.speak({text:lines[i].replace(/ \/ /g,', '),lang:'el-GR',rate:rate,queueStrategy:0})}catch(e){toast('Audio could not play');break}}
  if(onEach&&tok===sayTok)onEach(-1)}
 /* ---------- audio ---------- */
+const USE_FILES=false;
 function hid(s){const b=new TextEncoder().encode(s);let h=0x811c9dc5;for(const x of b){h^=x;h=Math.imul(h,0x01000193)>>>0}return ('0000000'+h.toString(16)).slice(-8)}
 const AUD=new Audio();AUD.preload='auto';let audTok=0;
 function playFiles(lines,rate,onEach){const tok=++audTok;let i=0;try{speechSynthesis.cancel()}catch(e){}
@@ -224,7 +225,7 @@ if(!NTTS&&'speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschang
 function useTTS(){try{return 'speechSynthesis' in window&&(greekVoice||speechSynthesis.getVoices().length===0||!ttsCap)}catch(e){return false}}
 function say(text,rate=0.9,onEach){text=(Array.isArray(text)?text:[text]).map(t=>t.replace(/ \/ /g,', '));
  if(NTTS){nativeSay(text,rate,onEach);return}
- if(location.protocol.startsWith('http')){playFiles(text,rate,onEach);return}
+ if(USE_FILES&&location.protocol.startsWith('http')){playFiles(text,rate,onEach);return}
  deviceSay(text,rate,onEach)}
 function deviceSay(text,rate,onEach){
  if(useTTS()){try{if(!greekVoice)pickVoice();
