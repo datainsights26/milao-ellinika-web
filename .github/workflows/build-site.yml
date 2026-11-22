@@ -35,8 +35,10 @@ jobs:
           key: audio-${{ hashFiles('phrases.json', 'tools/gen_audio.py') }}
           restore-keys: audio-
 
-      - name: Install Piper
-        run: pip install piper-tts==1.8.0
+      - name: Install Piper and ffmpeg
+        run: |
+          pip install piper-tts==1.8.0
+          command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
 
       - name: Download the Greek voice
         run: |
