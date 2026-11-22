@@ -1,0 +1,68 @@
+name: Build website with Greek audio
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache the Greek voice
+        uses: actions/cache@v4
+        with:
+          path: voice
+          key: piper-el_GR-rapunzelina-low-v1
+
+      - name: Cache recordings
+        uses: actions/cache@v4
+        with:
+          path: audio-cache
+          key: audio-${{ hashFiles('phrases.json', 'tools/gen_audio.py') }}
+          restore-keys: audio-
+
+      - name: Install Piper
+        run: pip install piper-tts==1.8.0
+
+      - name: Download the Greek voice
+        run: |
+          mkdir -p voice
+          base=https://huggingface.co/rhasspy/piper-voices/resolve/main/el/el_GR/rapunzelina/low
+          for f in el_GR-rapunzelina-low.onnx el_GR-rapunzelina-low.onnx.json; do
+            [ -s "voice/$f" ] || curl -fsSL -o "voice/$f" "$base/$f?download=true"
+          done
+
+      - name: Record every phrase
+        run: python tools/gen_audio.py voice/el_GR-rapunzelina-low.onnx audio-cache
+
+      - name: Assemble the site
+        run: |
+          mkdir _site
+          rsync -a --exclude .git --exclude .github --exclude tools --exclude voice --exclude audio-cache --exclude _site --exclude phrases.json ./ _site/
+          mkdir _site/audio
+          for id in $(python -c "import json;print(' '.join(p['id'] for p in json.load(open('phrases.json'))))"); do cp "audio-cache/$id.mp3" _site/audio/; done
+          du -sh _site _site/audio
+
+      - name: Publish to GitHub Pages (gh-pages branch)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd _site
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Publish site from ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages

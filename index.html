@@ -208,12 +208,25 @@ async function nativeSay(lines,rate,onEach){const tok=++sayTok;try{await NTTS.st
   try{await NTTS.speak({text:lines[i].replace(/ \/ /g,', '),lang:'el-GR',rate:rate,queueStrategy:0})}catch(e){toast('Audio could not play');break}}
  if(onEach&&tok===sayTok)onEach(-1)}
 /* ---------- audio ---------- */
+function hid(s){const b=new TextEncoder().encode(s);let h=0x811c9dc5;for(const x of b){h^=x;h=Math.imul(h,0x01000193)>>>0}return ('0000000'+h.toString(16)).slice(-8)}
+const AUD=new Audio();AUD.preload='auto';let audTok=0;
+function playFiles(lines,rate,onEach){const tok=++audTok;let i=0;try{speechSynthesis.cancel()}catch(e){}
+ const slow=rate<0.8?0.7:1;
+ const fallback=()=>{if(tok!==audTok)return;audTok++;const rest=lines.slice(i);deviceSay(rest,rate,onEach?(k=>onEach(k<0?-1:k+i)):null)};
+ const next=()=>{if(tok!==audTok)return;if(i>=lines.length){if(onEach)onEach(-1);return}
+  if(onEach)onEach(i);AUD.onended=()=>{i++;next()};AUD.onerror=fallback;
+  AUD.src='audio/'+hid(lines[i])+'.mp3';AUD.defaultPlaybackRate=slow;AUD.playbackRate=slow;
+  const p=AUD.play();if(p&&p.catch)p.catch(err=>{if(err&&err.name==='NotAllowedError')toast('Tap the speaker again to play');else fallback()})};
+ next()}
 let greekVoice=null,ttsCap=null,speakingLine=-1;
 function pickVoice(){try{const v=speechSynthesis.getVoices();greekVoice=v.find(x=>/^el/i.test(x.lang))||null;return v.length}catch(e){return 0}}
 if(!NTTS&&'speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
 function useTTS(){try{return 'speechSynthesis' in window&&(greekVoice||speechSynthesis.getVoices().length===0||!ttsCap)}catch(e){return false}}
-function say(text,rate=0.9,onEach){text=Array.isArray(text)?text:[text];
+function say(text,rate=0.9,onEach){text=(Array.isArray(text)?text:[text]).map(t=>t.replace(/ \/ /g,', '));
  if(NTTS){nativeSay(text,rate,onEach);return}
+ if(location.protocol.startsWith('http')){playFiles(text,rate,onEach);return}
+ deviceSay(text,rate,onEach)}
+function deviceSay(text,rate,onEach){
  if(useTTS()){try{if(!greekVoice)pickVoice();
   const run=()=>{try{speechSynthesis.resume()}catch(e){}
    window._utts=text.map((t,i)=>{const u=new SpeechSynthesisUtterance(t.replace(/ \/ /g,', '));u.lang='el-GR';if(greekVoice)u.voice=greekVoice;u.rate=rate;
@@ -239,13 +252,24 @@ function scoreSpeech(heard,target){let best=0;for(const h of heard){let s=sim(to
 /* ---------- speech recognition ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let dict=null,recMode=NSR?'native':SR?'browser':'self',rec=null,live=false,heard=[],recTimer=0;
-let partialAlts=[];
+let partialAlts=[],micMsg='';
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const MICERR={'not-allowed':IOS?'The microphone is blocked for this page. In Safari tap aA (or the page icon) › Website Settings › Microphone › Allow, then reload. Also check Settings › Apps › Safari › Microphone.':'The microphone is blocked for this page. Allow it in the browser\'s site settings, then reload.',
+ 'service-not-allowed':IOS?'Speech recognition is switched off. Turn on Dictation in Settings › General › Keyboard, then reload the page.':'Speech recognition is not allowed in this browser.',
+ 'audio-capture':'No microphone was found.','network':'Speech recognition needs an internet connection.','no-speech':'Didn\'t hear anything. Tap the mic and speak a little louder.','aborted':'Stopped. Tap the mic to try again.','language-not-supported':'Greek speech recognition isn\'t available on this device.'};
+function micReason(){if(micMsg)return micMsg;const ua=navigator.userAgent;
+ if(IOS&&navigator.standalone)return 'Speech marking doesn\'t work when the course is opened from the Home Screen icon. Open the link in Safari to use the microphone.';
+ if(IOS&&/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua))return 'On iPhone, speech marking only works in Safari. Open the link in Safari.';
+ if(!SR)return 'This browser has no speech recognition. Use Safari on iPhone, or Chrome on Android or a computer.';
+ return 'The microphone isn\'t available.'}
 function startListening(){
  heard=[];partialAlts=[];
  if(recMode==='native'){nativeListen();return}
  if(recMode==='browser'){try{rec=new SR();rec.lang='el-GR';rec.interimResults=true;rec.maxAlternatives=4;
    rec.onresult=e=>{const all=[];for(let k=0;k<e.results.length;k++)all.push(e.results[k][0].transcript);const r=e.results[e.results.length-1];const alts=[all.join(' ').trim()];for(let k=1;k<r.length;k++)alts.push(r[k].transcript);partialAlts=alts;showHeard(alts[0]);if(r.isFinal)heard=alts};
-   rec.onerror=e=>{if(e.error==='service-not-allowed'&&/iPhone|iPad|Macintosh/.test(navigator.userAgent))toast('Turn on Dictation: Settings › General › Keyboard');if(e.error==='not-allowed'||e.error==='service-not-allowed'||e.error==='audio-capture'){recMode=dict?'dict':'self';stopUI();renderPanel();toast(recMode==='dict'?'Tap the mic again':'Microphone not available here')}};
+   rec.onerror=e=>{const m=MICERR[e.error]||('Speech recognition error: '+e.error);
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'||e.error==='audio-capture'){micMsg=m;recMode=dict?'dict':'self';stopUI();renderPanel();if(recMode==='dict')toast('Tap the mic again')}
+    else{stopUI();const r=$('#res');if(r)r.innerHTML='<p class="heard">'+esc(m)+'</p>'}};
    rec.onend=()=>{if(live)finishListening()};rec.start();setLive(true);recTimer=setTimeout(()=>{try{rec.stop()}catch(e){}},7000);return}catch(e){recMode=dict?'dict':'self';renderPanel();return}}
  if(recMode==='dict'&&dict){dict.start().then(()=>{}).catch(err=>{const c=err&&(err.code||err.message||err);if(String(c).includes('not_granted')){recMode='self';renderPanel()}setLive(false)});setLive(true);recTimer=setTimeout(()=>{dict.stop().catch(()=>{})},7000)}
 }
@@ -297,7 +321,7 @@ function vQuiz(u){if(!qz)newQuiz();if(qz.done){const pct=Math.round(qz.score/qz.
  const showG=q.type!=='g2e';
  return head(u)+`<div class="card"><div class="prog"><span>Question ${qz.i+1} of ${qz.qs.length}</span><span>Score ${qz.score}</span></div>${prompt}<div class="opts">${q.opts.map((o,i)=>{let c='';if(q.ans!==null){if(o===q.item)c=' ok';else if(i===q.ans)c=' no'}return `<button class="opt${showG?' gr':''}${c}" data-opt="${i}" ${q.ans!==null?'disabled':''}>${showG?o[0]:esc(o[2])}</button>`}).join('')}</div>${q.ans!==null?`<p class="note"><b class="gr">${q.item[0]}</b> · ${q.item[1]} · ${esc(q.item[2])}</p><div class="btns" style="justify-content:flex-end"><button class="btn" data-act="qnext">${qz.i+1<qz.qs.length?'Next':'See score'}</button></div>`:''}</div>`}
 function vSpeak(u){const it=speakItem(),n=u.items.length;
- const modeNote=recMode==='self'?`<p class="note">${CAP?'Speech marking needs the microphone and Google speech services. Allow the microphone in Settings › Apps › Μιλάω ελληνικά › Permissions, then reopen the app.':'Speech marking isn\'t available in this browser, or the microphone was not allowed. It works in Safari on iPhone and in Chrome on Android or a computer.'} For now: listen, say it aloud, then mark yourself.</p>`:`<p class="note">Tap the mic, say the phrase, and the app scores how close you were. Allow the microphone if asked.${recMode==='native'?' Uses your phone\'s Google speech recognition, so it needs an internet connection unless Greek offline speech is downloaded.':' Works in Safari on iPhone and in Chrome or Edge. On an iPhone: no sound? Turn off Silent mode. Mic not working? Turn on Dictation in Settings › General › Keyboard.'}</p>`;
+ const modeNote=recMode==='self'?`<p class="note">${CAP?'Speech marking needs the microphone and Google speech services. Allow the microphone in Settings › Apps › Μιλάω ελληνικά › Permissions, then reopen the app.':''+micReason()} For now: listen, say it aloud, then mark yourself.</p>`:`<p class="note">Tap the mic, say the phrase, and the app scores how close you were. Allow the microphone if asked.${recMode==='native'?' Uses your phone\'s Google speech recognition, so it needs an internet connection unless Greek offline speech is downloaded.':' Works in Safari on iPhone and in Chrome or Edge. On iPhone, open the link in Safari itself and turn on Dictation in Settings › General › Keyboard.'}</p>`;
  const ctl=recMode==='self'?`<div class="btns" style="justify-content:center"><button class="btn" data-act="selfok">I said it well</button><button class="btn ghost" data-act="selfno">Needs practice</button></div><div id="res"></div>`:`<button class="mic" id="mic" data-act="mic" aria-label="Speak">${I.mic}</button><p class="e" id="micHint">Tap and say it</p><div id="res"></div>`;
  const done=(S.spoke[K()]||{})[sp.i]?' · <span style="color:var(--good)">done</span>':'';
  return head(u)+`<div class="card"><div class="prog"><span>${sp.i+1} of ${n}${done}</span><span>${Object.keys(S.spoke[K()]||{}).length} said well</span></div><div class="big">${it[0]}</div><div class="t">${it[1]}</div><div class="e">${esc(it[2])}</div><div class="btns" style="justify-content:center"><button class="btn ghost" data-act="spsay">${I.play}Listen</button><button class="btn ghost" data-act="spslow">${I.slow}Slowly</button></div>${ctl}<div class="nav"><button class="btn ghost" data-act="spprev">Back</button><button class="btn" data-act="spnext">Next</button></div>${modeNote}</div>`}
@@ -344,7 +368,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
  if(a==='spsay'){say(speakItem()[0]);return}
  if(a==='spslow'){say(speakItem()[0],0.6);return}
  if(a==='spnext'||a==='spprev'){stopUI();const n=u.items.length;sp.i=(sp.i+(a==='spnext'?1:n-1))%n;renderPanel();return}
- if(a==='mic'){if(live){stopListening();return}try{speechSynthesis.cancel()}catch(e){}startListening();return}
+ if(a==='mic'){if(live){stopListening();return}audTok++;try{AUD.pause()}catch(e){}try{speechSynthesis.cancel()}catch(e){}startListening();return}
  if(a==='selfok'||a==='selfno'){if(a==='selfok'){mark('spoke',S.unit,sp.i);updateTop()}sp.i=(sp.i+1)%u.items.length;renderPanel();return}
  if(a==='wsay'){say(u.items[wr.order[wr.i]][0]);return}
  if(a==='wcheck'){checkWrite(false);return}
