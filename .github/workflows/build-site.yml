@@ -15,6 +15,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Recorded audio is paused: the free Greek voices tested were not clear enough on single words.
+      USE_AUDIO: "no"
     steps:
       - uses: actions/checkout@v4
 
@@ -23,12 +26,14 @@ jobs:
           python-version: "3.12"
 
       - name: Cache the Greek voice
+        if: env.USE_AUDIO == 'yes'
         uses: actions/cache@v4
         with:
           path: voice
           key: piper-el_GR-rapunzelina-low-v1
 
       - name: Cache recordings
+        if: env.USE_AUDIO == 'yes'
         uses: actions/cache@v4
         with:
           path: audio-cache
@@ -36,11 +41,13 @@ jobs:
           restore-keys: audio-v2-
 
       - name: Install Piper and ffmpeg
+        if: env.USE_AUDIO == 'yes'
         run: |
           pip install piper-tts==1.8.0
           command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
 
       - name: Download the Greek voice
+        if: env.USE_AUDIO == 'yes'
         run: |
           mkdir -p voice
           base=https://huggingface.co/rhasspy/piper-voices/resolve/main/el/el_GR/rapunzelina/low
@@ -49,11 +56,10 @@ jobs:
           done
 
       - name: Record every phrase
+        if: env.USE_AUDIO == 'yes'
         run: python tools/gen_audio.py voice/el_GR-rapunzelina-low.onnx audio-cache
 
       - name: Assemble the site
-        env:
-          USE_AUDIO: "no"
         run: |
           mkdir _site
           rsync -a --exclude .git --exclude .github --exclude tools --exclude voice --exclude audio-cache --exclude _site --exclude phrases.json ./ _site/

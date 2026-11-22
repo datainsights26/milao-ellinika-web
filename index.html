@@ -125,6 +125,7 @@ footer{color:var(--mute);font-size:13px;margin-top:32px}
   <nav class="units" id="units" aria-label="Units"></nav>
   <div class="tabs" role="tablist" id="tabs"></div>
   <section id="panel"></section>
+  <p style="margin-top:28px"><button class="btn ghost" data-act="diag">Sound or microphone not working? Run a check</button></p>
   <footer>Phrases and dialogues written for this app, following the book's lesson topics. The book's own recordings are at deltos.gr/downloads. Audio and speech marking use your device's Greek voice and speech recognition.</footer>
 </main>
 <div class="toast" id="toast"></div>
@@ -227,14 +228,17 @@ function say(text,rate=0.9,onEach){text=(Array.isArray(text)?text:[text]).map(t=
  if(NTTS){nativeSay(text,rate,onEach);return}
  if(USE_FILES&&location.protocol.startsWith('http')){playFiles(text,rate,onEach);return}
  deviceSay(text,rate,onEach)}
+let lastTTSerr='';
 function deviceSay(text,rate,onEach){
  if(useTTS()){try{if(!greekVoice)pickVoice();
-  const run=()=>{try{speechSynthesis.resume()}catch(e){}
-   window._utts=text.map((t,i)=>{const u=new SpeechSynthesisUtterance(t.replace(/ \/ /g,', '));u.lang='el-GR';if(greekVoice)u.voice=greekVoice;u.rate=rate;
-    if(onEach){u.onstart=()=>onEach(i);u.onend=()=>{if(i===text.length-1)onEach(-1)}}return u});
-   window._utts.forEach(u=>speechSynthesis.speak(u))};
-  if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(run,150)}else run();
-  return}catch(e){}}
+  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
+  try{speechSynthesis.resume()}catch(e){}
+  window._utts=text.map((t,i)=>{const u=new SpeechSynthesisUtterance(t);u.lang='el-GR';
+   if(greekVoice&&!IOS)u.voice=greekVoice;u.rate=rate;
+   u.onerror=ev=>{lastTTSerr=ev.error||'error';if(ev.error&&!/interrupted|canceled/.test(ev.error))toast('Sound error: '+ev.error)};
+   if(onEach){u.onstart=()=>onEach(i);u.onend=()=>{if(i===text.length-1)onEach(-1)}}return u});
+  window._utts.forEach(u=>speechSynthesis.speak(u));
+  return}catch(e){lastTTSerr=String(e)}}
  if(ttsCap){ttsCap.speak(text.map((t,i)=>({text:t.replace(/ \/ /g,', '),language:'el',id:String(i)})),{rate:Math.max(0.7,rate)}).catch(()=>toast('Audio could not play'));return}
  toast('No Greek voice on this device')}
 let toastT=0;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2200)}
@@ -337,7 +341,33 @@ function vNotes(u){const others=U.map((x,i)=>[x,i]).filter(([x,i])=>i!==S.unit&&
  return head(u)+`<label for="nt" style="font-weight:600">My notes for this unit</label><p class="e" style="margin:2px 0 8px;font-size:14px">Write anything: new words, tips from class, questions for your teacher. Tap + on any word in Learn to add it here.</p><textarea id="nt" placeholder="e.g. ευχαριστώ = thank you (stress on the end: ef-ha-ri-STO)">${esc(S.notes[K()]||'')}</textarea><div class="saved" id="saved">${S.notes[K()]?'Saved':''}</div>
  <div class="btns"><button class="btn ghost" data-act="copynotes">Copy all my notes</button></div>
  ${others.length?`<div class="allnotes"><h3 style="margin:20px 0 6px;font-size:17px;color:var(--ink)">Notes from other units</h3>${others.map(([x,i])=>`<article><h3 class="gr">${x.gr}</h3><p>${esc(S.notes[U[i].id])}</p></article>`).join('')}</div>`:''}`}
-function renderPanel(){const u=U[S.unit];const v={learn:vLearn,quiz:vQuiz,speak:vSpeak,write:vWrite,notes:vNotes}[S.tab];$('#panel').innerHTML=v(u)}
+function vCheck(){let voices=[];try{voices=speechSynthesis.getVoices()}catch(e){}
+ const gv=voices.filter(v=>/^el/i.test(v.lang)).map(v=>v.name+' ('+v.lang+(v.localService===false?', online':'')+')');
+ const standalone=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches));
+ const rows=[['Device',IOS?'iPhone / iPad':/Android/.test(navigator.userAgent)?'Android':'Computer'],['Browser',navigator.userAgent.replace(/^Mozilla\/5.0 /,'')],
+  ['Opened from Home Screen',standalone?'yes':'no'],['Speech voice support',('speechSynthesis' in window)?'yes':'no'],['Voices found',String(voices.length)],
+  ['Greek voices',gv.length?gv.join(', '):'none'],['Speech recognition',SR?'yes':'no'],['Last sound error',lastTTSerr||'none'],['Mic message',micMsg||'none']];
+ window._diag=rows.map(r=>r[0]+': '+r[1]).join('\n');
+ return `<h2>Sound and microphone check</h2><p class="lead">Run both tests, then send a screenshot of this page (or tap Copy report) to whoever is helping you.</p>
+ <div class="box"><div class="dl">${rows.map(r=>`<div><b>${esc(r[0])}</b><span>${esc(r[1])}</span></div>`).join('')}</div></div>
+ <div class="btns"><button class="btn" data-act="dsound">${I.play}Test sound</button><button class="btn" data-act="dmic">${I.mic}Test microphone</button><button class="btn ghost" data-act="dcopy">Copy report</button><button class="btn ghost" data-tab="learn">Back to lessons</button></div>
+ <pre id="dlog" style="white-space:pre-wrap;background:var(--soft);border-radius:12px;padding:12px;min-height:80px;font-size:14px">Results appear here.</pre>`}
+function dlog(m){const el=$('#dlog');if(!el)return;if(el.textContent==='Results appear here.')el.textContent='';el.textContent+=m+'\n';window._diag=(window._diag||'')+'\n'+m}
+function diagSound(){const t0=Date.now(),ts=()=>((Date.now()-t0)/1000).toFixed(1)+'s ';
+ if(!('speechSynthesis' in window)){dlog('Sound: this browser has no speech voice.');return}
+ try{if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();speechSynthesis.resume()}catch(e){}
+ const u=new SpeechSynthesisUtterance('Γεια σου! Καλώς ήρθες.');u.lang='el-GR';let started=false;
+ u.onstart=()=>{started=true;dlog(ts()+'Sound: started speaking')};u.onend=()=>dlog(ts()+'Sound: finished');u.onerror=e=>dlog(ts()+'Sound: error '+(e.error||''));
+ dlog('Sound: asking the phone to say "Γεια σου! Καλώς ήρθες."');try{speechSynthesis.speak(u)}catch(e){dlog('Sound: failed '+e)}
+ setTimeout(()=>{if(!started)dlog('Sound: nothing started after 4 s (speaking='+speechSynthesis.speaking+', pending='+speechSynthesis.pending+')')},4000)}
+function diagMic(){if(!SR){dlog('Mic: this browser has no speech recognition.');return}
+ const t0=Date.now(),ts=()=>((Date.now()-t0)/1000).toFixed(1)+'s ';let r;
+ try{r=new SR();r.lang='el-GR';r.interimResults=true}catch(e){dlog('Mic: could not create recogniser '+e);return}
+ r.onstart=()=>dlog(ts()+'Mic: listening. Say "Γεια σου".');r.onaudiostart=()=>dlog(ts()+'Mic: hearing audio');
+ r.onresult=e=>{const x=e.results[e.results.length-1];dlog(ts()+'Mic: heard "'+x[0].transcript+'"'+(x.isFinal?' (final)':''))};
+ r.onerror=e=>dlog(ts()+'Mic: error '+e.error+(e.message?' '+e.message:''));r.onend=()=>dlog(ts()+'Mic: stopped');
+ try{r.start();setTimeout(()=>{try{r.stop()}catch(e){}},6000)}catch(e){dlog('Mic: start failed '+e)}}
+function renderPanel(){const u=U[S.unit];const v={learn:vLearn,quiz:vQuiz,speak:vSpeak,write:vWrite,notes:vNotes,check:vCheck}[S.tab];$('#panel').innerHTML=v(u)}
 function render(){updateTop();renderTabs();renderPanel()}
 
 /* ---------- events ---------- */
@@ -369,6 +399,10 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
  if(a==='spsay'){say(speakItem()[0]);return}
  if(a==='spslow'){say(speakItem()[0],0.6);return}
  if(a==='spnext'||a==='spprev'){stopUI();const n=u.items.length;sp.i=(sp.i+(a==='spnext'?1:n-1))%n;renderPanel();return}
+ if(a==='diag'){S.tab='check';renderTabs();renderPanel();window.scrollTo({top:$('#tabs').offsetTop,behavior:'smooth'});return}
+ if(a==='dsound'){diagSound();return}
+ if(a==='dmic'){diagMic();return}
+ if(a==='dcopy'){try{navigator.clipboard.writeText(window._diag||'').then(()=>toast('Report copied'),()=>toast('Copy not allowed, please take a screenshot'))}catch(e){toast('Please take a screenshot')}return}
  if(a==='mic'){if(live){stopListening();return}audTok++;try{AUD.pause()}catch(e){}try{speechSynthesis.cancel()}catch(e){}startListening();return}
  if(a==='selfok'||a==='selfno'){if(a==='selfok'){mark('spoke',S.unit,sp.i);updateTop()}sp.i=(sp.i+1)%u.items.length;renderPanel();return}
  if(a==='wsay'){say(u.items[wr.order[wr.i]][0]);return}
