@@ -1,21 +1,38 @@
-import sys, wave, io
-from piper import PiperVoice
-from piper.config import SynthesisConfig
-v = PiperVoice.load(sys.argv[1])
-print("CFG", v.config.noise_scale, v.config.noise_w_scale, v.config.length_scale, v.config.sample_rate)
-words = ["Αθήνα", "γάλα", "Γεια σου", "Καλημέρα", "νερό", "Δουλεύω από Δευτέρα μέχρι Παρασκευή."]
-configs = {"default": SynthesisConfig(), "nw0.3": SynthesisConfig(noise_w_scale=0.3), "nw0": SynthesisConfig(noise_w_scale=0.0, noise_scale=0.333),
-           "comma": SynthesisConfig(noise_w_scale=0.3)}
-for name, c in configs.items():
-    out = []
-    for w in words:
-        t = w if name != "comma" else "Λοιπόν, " + w
-        secs = sum(len(ch.audio_int16_bytes) for ch in v.synthesize(t, syn_config=c)) / 2 / v.config.sample_rate
-        out.append(f"{w}={secs:.2f}")
-    print("RES", name, " ".join(out))
-# save samples for inspection
-import os; os.makedirs("samples", exist_ok=True)
-for name in ["default", "nw0.3", "nw0"]:
-    for i, w in enumerate(words[:3]):
-        with wave.open(f"samples/{name}-{i}.wav", "wb") as f:
-            v.synthesize_wav(w, f, syn_config=configs[name])
+"""Compare Greek voices: generate test phrases, then check them with Whisper speech recognition."""
+import subprocess, wave, os, json, unicodedata, difflib
+import numpy as np, torch, scipy.io.wavfile as wavfile
+from transformers import VitsModel, AutoTokenizer
+from faster_whisper import WhisperModel
+
+words = ["Αθήνα", "γάλα", "νερό", "Γεια σου", "Καλημέρα", "ευχαριστώ", "Χαίρω πολύ.", "Πόσο κάνει;", "τα πορτοκάλια",
+         "Δουλεύω από Δευτέρα μέχρι Παρασκευή.", "Θα ήθελα έναν καφέ.", "ψωμί", "άλφα. Αθήνα"]
+os.makedirs("samples", exist_ok=True)
+
+def norm(s):
+    s = unicodedata.normalize("NFD", s.lower())
+    return "".join(c for c in s if c.isalpha())
+
+tok = AutoTokenizer.from_pretrained("facebook/mms-tts-ell")
+mms = VitsModel.from_pretrained("facebook/mms-tts-ell")
+print("MMS uroman needed:", getattr(tok, "is_uroman", None))
+for i, w in enumerate(words):
+    inp = tok(w, return_tensors="pt")
+    torch.manual_seed(0)
+    with torch.no_grad():
+        audio = mms(**inp).waveform[0].numpy()
+    wavfile.write(f"samples/mms-{i}.wav", mms.config.sampling_rate, (audio * 32767).astype(np.int16))
+    subprocess.run(["espeak-ng", "-v", "el", "-s", "140", "-w", f"samples/espeak-{i}.wav", w], check=True)
+
+asr = WhisperModel("small", device="cpu", compute_type="int8")
+for eng in ["mms", "espeak"]:
+    scores = []
+    for i, w in enumerate(words):
+        f = f"samples/{eng}-{i}.wav"
+        segs, info = asr.transcribe(f, language="el", beam_size=5)
+        text = " ".join(s.text for s in segs).strip()
+        with wave.open(f) as x:
+            dur = x.getnframes() / x.getframerate()
+        sc = difflib.SequenceMatcher(None, norm(w), norm(text)).ratio()
+        scores.append(sc)
+        print(f"RES {eng:7s} {dur:5.2f}s score={sc:.2f} want={w!r} heard={text!r}")
+    print(f"AVG {eng} {sum(scores)/len(scores):.2f}")
