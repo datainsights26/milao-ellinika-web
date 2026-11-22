@@ -27,6 +27,10 @@ with tempfile.TemporaryDirectory() as tmp:
         subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(wav), "-af", "adelay=120|120,apad=pad_dur=0.15",
                         "-ac", "1", "-ar", "22050", "-b:a", "48k", str(mp3)], check=True)
         made += 1
+# quick check of how a few phrases are pronounced and how long they are
+for t in ["Γεια σου", "Καλημέρα", "ευχαριστώ", "Δουλεύω από Δευτέρα μέχρι Παρασκευή."]:
+    secs = sum(len(c.audio_int16_bytes) for c in voice.synthesize(t, syn_config=cfg)) / 2 / voice.config.sample_rate
+    print(f"CHECK {t!r} phonemes={voice.phonemize(t)} seconds={secs:.2f} length_scale_default={voice.config.length_scale}")
 print(f"{made} new recordings, {len(phrases)} phrases in total")
 missing = [p["id"] for p in phrases if not (out / f"{p['id']}.mp3").exists()]
 if missing:
