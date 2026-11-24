@@ -1,0 +1,16 @@
+{
+  "name": "Verbs & Places · Greekify me",
+  "short_name": "Verbs & Places",
+  "description": "Greekify me · Greek A1 workbook: present tense verbs, places and articles, πηγαίνω vs είμαι.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0D5EAF",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
