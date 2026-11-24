@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verbs &amp; Places · Greekify me</title>
+<meta name="description" content="Greekify me · Greek A1 workbook: present tense verbs, places and articles, πηγαίνω vs είμαι.">
+<meta name="theme-color" content="#0D5EAF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Verbs & Places">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+/* VOICE: friendly Greekify me classroom: warm, clear, never busy
+   IDEA: the A1 workbook as a stack of fold-out lesson cards on a Greek island morning
+   PICTURE: the cards themselves; island houses and sea close the page like the ad
+   COLOUR and TYPE: white, Aegean blue #0D5EAF, sky #C5E3F4, sun #FFC93C; ο blue, η bougainvillea pink, το olive green. Patrick Hand for English headings, Manrope for Greek and body
+   LAYOUT: modest brand header, name/date strip, four accordions, one column, 760px */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#081a33);--ink:light-dark(#0A2E5C,#e8f1fb);--mute:light-dark(#4d6482,#a9bdd6);
+--blue:light-dark(#0D5EAF,#6fb1ff);--sky:light-dark(#C5E3F4,#163a63);--skysoft:light-dark(#EEF6FC,#0e2847);--sun:#FFC93C;
+--card:light-dark(#ffffff,#0c2242);--line:light-dark(#d6e6f3,#24466f);
+--m:light-dark(#0D5EAF,#6fb1ff);--f:light-dark(#C2306A,#ff8bb6);--n:light-dark(#4F7A33,#9fd07a);
+--good:light-dark(#1e7d45,#5fd394);--bad:light-dark(#b3261e,#ff8a80)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,sans-serif;overflow-x:clip}
+.hand{font-family:'Patrick Hand',Manrope,cursive;font-weight:400}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.key{display:block;width:100%;height:20px}
+.wrap{max-width:760px;margin:0 auto;padding:0 max(4vw,16px)}
+header{padding:22px 0 8px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px}
+.brand{font-size:30px;line-height:1;color:var(--blue)}.brand span{box-shadow:inset 0 -.28em 0 var(--sun)}
+.bubble{position:relative;background:var(--blue);color:#fff;border-radius:999px;padding:7px 16px;font-weight:800;font-size:16px;margin-left:10px}
+.bubble::before{content:"";position:absolute;left:-9px;top:50%;margin-top:-7px;border:7px solid transparent;border-right:10px solid var(--blue);border-left:0}
+:root .bubble{color:light-dark(#fff,#06142a)}
+.bubble i{font-style:normal;font-family:'Patrick Hand',cursive;font-weight:400;color:light-dark(#C5E3F4,#0b2a52);margin-left:6px}
+h1{margin:8px 0 2px;font-size:clamp(40px,9vw,56px);line-height:1;color:var(--blue);text-wrap:balance}
+.sub{margin:0 0 16px;color:var(--mute)}
+.who{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:10px;margin-bottom:12px}
+.who label{font-size:13px;color:var(--mute);font-weight:700}
+.who input{width:100%;margin-top:4px;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-size:16px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin:6px 0 14px}
+.pill{min-height:44px;padding:0 18px;border-radius:999px;font-weight:800;display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff}
+:root .pill{color:light-dark(#fff,#06142a)}
+.pill.soft{background:var(--skysoft);color:var(--blue);box-shadow:inset 0 0 0 1.5px var(--sky)}
+.pill svg{width:18px;height:18px}
+details.part{border:2px solid var(--sky);border-radius:24px;margin:0 0 14px;background:var(--card);overflow:hidden}
+details.part[open]{border-color:var(--blue)}
+summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:16px 18px;min-height:64px}
+summary::-webkit-details-marker{display:none}
+.num{flex:none;width:44px;height:44px;border-radius:50%;background:var(--sun);color:#0A2E5C;display:grid;place-items:center;font:28px/1 'Patrick Hand',cursive}
+.st{flex:1}.st b{display:block;font:26px/1.05 'Patrick Hand',cursive;color:var(--blue)}.st small{color:var(--mute);font-size:14px}
+.badge{flex:none;font-size:13px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--skysoft);color:var(--blue);white-space:nowrap}
+.badge.done{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.chev{flex:none;width:28px;height:28px;color:var(--blue);transition:transform .2s}
+details[open]>summary .chev{transform:rotate(180deg)}
+@media(prefers-reduced-motion:reduce){.chev{transition:none}}
+.inner{padding:0 18px 18px}
+details.sub{border-top:1.5px solid var(--line)}
+details.sub>summary{padding:12px 0;min-height:52px;gap:10px}
+details.sub>summary b{flex:1;font-size:17px;font-weight:800}
+details.sub>summary .chev{width:22px;height:22px}
+.body{padding:2px 0 16px}
+.tip{background:var(--skysoft);border-radius:16px;padding:12px 14px;margin:8px 0 12px}
+.tip p{margin:4px 0}
+.gr{font-weight:700}
+table.conj{width:100%;border-collapse:collapse;margin:6px 0 10px}
+.conj td{padding:7px 4px;border-bottom:1px solid var(--line)}.conj td:first-child{color:var(--mute);width:42%}
+.conj td.form{font-weight:800;font-size:18px}.conj em{font-style:normal;color:var(--blue);box-shadow:inset 0 -.25em 0 color-mix(in srgb,var(--sun) 70%,transparent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--sky);background:var(--card);font-weight:700}
+.chip[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:light-dark(#fff,#06142a)}
+.chip small{font-weight:500;color:var(--mute);margin-left:4px}.chip[aria-pressed=true] small{color:inherit;opacity:.8}
+.ib{width:40px;height:40px;border-radius:50%;display:inline-grid;place-items:center;color:var(--blue);vertical-align:middle}
+.ib:hover{background:var(--skysoft)}.ib svg{width:20px;height:20px}
+.q{padding:10px 0;border-bottom:1px dashed var(--line)}
+.q .line{font-size:18px;line-height:2.1}
+.q input.blank{width:9.5em;max-width:100%;padding:6px 10px;border:0;border-bottom:2.5px solid var(--blue);background:var(--skysoft);border-radius:8px 8px 0 0;font-weight:700;font-size:17px}
+.q .hint{color:var(--mute);font-size:14px}
+.fb{font-size:14px;min-height:0;margin-top:2px}.fb.ok{color:var(--good);font-weight:700}.fb.no{color:var(--bad)}
+.q.ok input.blank{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,transparent)}
+.q.no input.blank{border-color:var(--bad)}
+.choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.choice{min-height:44px;min-width:64px;padding:0 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font-weight:800;font-size:17px}
+.choice.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--card))}
+.choice.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.row-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.places{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gcol h4{margin:0 0 6px;font-size:15px;padding:6px 10px;border-radius:10px;color:#fff}
+:root .gcol h4{color:light-dark(#fff,#06142a)}
+.gcol.m h4{background:var(--m)}.gcol.f h4{background:var(--f)}.gcol.n h4{background:var(--n)}
+.place{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:4px 0 4px 2px;border-bottom:1px solid var(--line)}
+.place .gr{display:block;font-size:16px}.place small{color:var(--mute);font-size:13px}
+.m .art{color:var(--m)}.f .art{color:var(--f)}.n .art{color:var(--n)}
+.game{text-align:center;background:var(--skysoft);border-radius:18px;padding:16px}
+.game .word{font-size:clamp(26px,7vw,34px);font-weight:800;margin:6px 0}
+.game .choices{justify-content:center}
+.score{font-weight:800;color:var(--blue)}
+.formula{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:8px 14px;align-items:center;font-size:18px;margin:8px 0}
+.formula b{font-weight:800}.formula .eq{color:var(--blue);font-weight:800;font-size:20px}
+.ex{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;border-bottom:1px solid var(--line);padding:6px 0}
+.ex .e{color:var(--mute);font-size:14px}
+.warn{border-left:4px solid var(--sun);padding:8px 12px;background:color-mix(in srgb,var(--sun) 14%,transparent);border-radius:0 12px 12px 0;margin:10px 0}
+textarea{width:100%;min-height:72px;margin-top:6px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-size:17px;font-weight:600;resize:vertical}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+.scene{display:block;width:100%;height:auto;margin-top:26px}
+footer{background:light-dark(#1F9BCB,#0b4f73);color:#fff;text-align:center;padding:4px 16px 26px;font-size:14px}
+footer .hand{font-size:22px}
+@media(max-width:600px){.places{grid-template-columns:minmax(0,1fr)}.who{grid-template-columns:minmax(0,1fr)}.formula{font-size:16px}h1{font-size:42px}}
+</style>
+</head>
+<body>
+<svg class="key" aria-hidden="true"><defs><pattern id="k" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M2 20V2H18V14H6V6H14V10" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="square"/></pattern></defs><rect width="100%" height="20" fill="#0D5EAF"/><rect width="100%" height="20" fill="url(#k)"/></svg>
+<div class="wrap">
+  <header><div class="brand hand">Greekify <span>me</span></div><div class="bubble">Γεια σου!<i>Hello!</i></div></header>
+  <h1 class="hand">Verbs &amp; Places</h1>
+  <p class="sub">Greek A1 revision workbook · simple present · going to and being at a place. Open one part at a time.</p>
+  <div class="who"><div><label for="nm">Name</label><input id="nm" autocomplete="name" placeholder="Your name"></div><div><label for="dt">Date</label><input id="dt" type="date"></div></div>
+  <div class="bar"><button class="pill soft" id="toggleAll">Open all parts</button><button class="pill" id="copyAll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Copy answers for my teacher</button></div>
+  <main id="parts"></main>
+</div>
+<svg class="scene" viewBox="0 0 1080 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <rect width="1080" height="260" style="fill:var(--sky)"/>
+  <circle cx="150" cy="70" r="44" fill="#FFC93C"/>
+  <rect y="120" width="1080" height="140" fill="#1F9BCB"/>
+  <path d="M40 150q20-10 40 0t40 0t40 0M620 170q14-8 28 0t28 0" fill="none" stroke="#fff" stroke-width="4" opacity=".45" stroke-linecap="round"/>
+  <g><rect x="250" y="150" width="170" height="110" fill="#fff"/><rect x="390" y="150" width="30" height="110" fill="#E3EEF8"/><path d="M300 200V186a12 12 0 0 1 24 0V200ZM330 260V226a16 16 0 0 1 32 0V260Z" fill="#0D5EAF"/></g>
+  <g><rect x="420" y="110" width="190" height="150" fill="#fff"/><rect x="578" y="110" width="32" height="150" fill="#E3EEF8"/><path d="M432 110a83 83 0 0 1 166 0Z" fill="#0D5EAF"/><rect x="511" y="20" width="8" height="34" fill="#0D5EAF"/><rect x="501" y="30" width="28" height="7" fill="#0D5EAF"/><path d="M495 260V216a20 20 0 0 1 40 0V260Z" fill="#0D5EAF"/></g>
+  <g><rect x="610" y="170" width="300" height="90" fill="#fff"/><path d="M640 210V198a11 11 0 0 1 22 0V210ZM780 210V198a11 11 0 0 1 22 0V210ZM840 210V198a11 11 0 0 1 22 0V210Z" fill="#0D5EAF"/></g>
+  <circle cx="420" cy="140" r="14" fill="#E0457B"/><circle cx="436" cy="130" r="15" fill="#F06292"/><circle cx="440" cy="150" r="12" fill="#E0457B"/><circle cx="612" cy="160" r="13" fill="#F06292"/><circle cx="626" cy="150" r="14" fill="#E0457B"/>
+</svg>
+<footer><p class="hand">Καλή μελέτη! Happy studying.</p><p>Greekify me · Live online Greek lessons, plus a free app to practise anywhere.</p></footer>
+<div class="toast" id="toast"></div>
+<script>
+{
+const ICON={chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+ play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>'};
+const PRON=['εγώ','εσύ','αυτός / αυτή','εμείς','εσείς','αυτοί / αυτές'];
+const G1=[['μένω','live, stay'],['μαθαίνω','learn'],['αρχίζω','begin'],['τελειώνω','finish'],['παίρνω','take, get'],['πίνω','drink']];
+const G2=[['βοηθάω','help'],['ξεκινάω','start'],['πεινάω','be hungry'],['τραγουδάω','sing'],['σταματάω','stop'],['γελάω','laugh'],['διψάω','be thirsty']];
+const END1=['ω','εις','ει','ουμε','ετε','ουν'],END2=['άω','άς','άει','άμε','άτε','ούν'];
+const ALT2={2:['ά'],5:['άνε','άν']},ALT1={5:['ουνε']};
+const conj=(v,g)=>{const st=v.slice(0,g===1?-1:-2);return (g===1?END1:END2).map(e=>[st,e])};
+const EX1=[['Εγώ','ελληνικά.','μαθαίνω',['μαθαίνω'],'εγώ → -ω'],['Εσύ','νερό.','πίνω',['πίνεις'],'εσύ → -εις'],['Η Μαρία','ωραία.','τραγουδάω',['τραγουδάει','τραγουδά'],'αυτή → -άει (red verb)'],['Εμείς','τη μαμά.','βοηθάω',['βοηθάμε'],'εμείς → -άμε (red verb)'],['Τα παιδιά','πολύ.','γελάω',['γελούν','γελάνε'],'αυτά/αυτοί → -ούν (red verb)'],['Εσύ',';','πεινάω',['πεινάς'],'εσύ → -άς (red verb)']];
+const EX2=[['Εμείς','στις 9.','ξεκινάω',['ξεκινάμε'],'εμείς → -άμε (red verb)'],['Το μάθημα','στις 7.','τελειώνω',['τελειώνει'],'το μάθημα = αυτό → -ει'],['Εσύ','τη μητέρα σου;','βοηθάω',['βοηθάς'],'εσύ → -άς (red verb)'],['Εγώ','στην Αθήνα.','μένω',['μένω'],'εγώ → -ω'],['Τα παιδιά','στο σπίτι.','μένω',['μένουν','μένουνε'],'τα παιδιά = αυτά → -ουν'],['Εσείς','τώρα;','σταματάω',['σταματάτε'],'εσείς → -άτε (red verb)']];
+const PL={m:[['κινηματογράφος','cinema','κινηματογράφο']],
+ f:[['στάση','stop'],['τράπεζα','bank'],['βιβλιοθήκη','library'],['καφετέρια','café']],
+ n:[['σχολείο','school'],['λιμάνι','port, harbour'],['πάρκο','park'],['αεροδρόμιο','airport'],['ταχυδρομείο','post office'],['μουσείο','museum'],['εστιατόριο','restaurant'],['γήπεδο','sports field'],['θέατρο','theatre'],['νοσοκομείο','hospital'],['ξενοδοχείο','hotel'],['σουπερμάρκετ','supermarket'],['συνεργείο','garage, repair shop'],['βενζινάδικο','petrol station']]};
+const ART={m:'ο',f:'η',n:'το'},STO={m:'στον',f:'στην',n:'στο'};
+const ALLPL=[].concat(...['m','f','n'].map(g=>PL[g].map(p=>({g,w:p[0],e:p[1],acc:p[2]||p[0]}))));
+const EX3=[['στην τράπεζα.','I am going to the bank.','Πηγαίνω'],['στο σχολείο.','I am at school.','Είμαι'],['στον κινηματογράφο.','I am going to the cinema.','Πηγαίνω'],['στο νοσοκομείο.','I am at the hospital.','Είμαι']];
+const EX4=[['Πηγαίνω','μουσείο.','στο'],['Είμαι','βιβλιοθήκη.','στην'],['Πηγαίνω','κινηματογράφο.','στον'],['Είμαι','αεροδρόμιο.','στο'],['Πηγαίνω','καφετέρια.','στην'],['Είμαι','στάση.','στην']];
+const EX5=[['Πού πηγαίνεις σήμερα;','Where are you going today?','go'],['Πού είσαι τώρα;','Where are you now?','at'],['Πού μένεις;','Where do you live?','live']];
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ς/g,'σ').replace(/[^a-zα-ω0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+
+/* ---------- saved answers (this browser only) ---------- */
+let A={};try{A=JSON.parse(localStorage.getItem('gm-verbs-places')||'{}')||{}}catch(e){}
+let saveT=0;const save=()=>{clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem('gm-verbs-places',JSON.stringify(A))}catch(e){}},300)};
+let toastT=0;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2200)}
+
+/* ---------- sound ---------- */
+let ttsCap=null,greek=null;
+const pick=()=>{try{greek=speechSynthesis.getVoices().find(v=>/^el/i.test(v.lang))||null}catch(e){}};
+if('speechSynthesis' in window){pick();speechSynthesis.onvoiceschanged=pick}
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+function say(t){t=t.replace(/ \/ /g,', ');
+ const canDevice='speechSynthesis' in window&&(greek||!ttsCap);
+ if(canDevice){try{if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='el-GR';if(greek&&!IOS)u.voice=greek;u.rate=.85;speechSynthesis.speak(u);return}catch(e){}}
+ if(ttsCap){ttsCap.speak(t,{language:'el',rate:.85}).catch(()=>toast('Sound could not play'));return}
+ toast('No Greek voice on this device')}
+const sp=t=>`<button class="ib" data-say="${esc(t)}" aria-label="Listen">${ICON.play}</button>`;
+
+/* ---------- building blocks ---------- */
+const sub=(id,title,html)=>`<details class="sub" data-id="${id}"${A.open&&A.open[id]?' open':''}><summary><b>${title}</b>${ICON.chev}</summary><div class="body">${html}</div></details>`;
+const part=(id,n,title,blurb,html)=>`<details class="part" data-id="${id}"${A.open&&A.open[id]?' open':''}><summary><span class="num">${n}</span><span class="st"><b>${title}</b><small>${blurb}</small></span><span class="badge" id="badge-${id}"></span>${ICON.chev}</summary><div class="inner">${html}</div></details>`;
+function conjTable(v,g){return `<table class="conj">${conj(v,g).map((c,i)=>`<tr><td>${PRON[i]}</td><td class="form">${c[0]}<em>${c[1]}</em> ${sp(PRON[i].split(' ')[0]+' '+c[0]+c[1])}</td></tr>`).join('')}</table>`}
+function verbGroup(list,g){const k='v'+g;const cur=A[k]||list[0][0];
+ return `<div class="chips" role="group" aria-label="Choose a verb">${list.map(v=>`<button class="chip" data-verb="${v[0]}" data-g="${g}" aria-pressed="${v[0]===cur}">${v[0]}<small>${v[1]}</small></button>`).join('')}</div><div id="conj${g}">${conjTable(cur,g)}</div>
+ <div class="tip"><p><b>Try it yourself:</b> write all six forms of <span class="gr" id="drillv${g}">${cur}</span>.</p>${PRON.map((p,i)=>`<div class="q" data-drill="${g}" data-i="${i}"><span class="line">${p} <input class="blank" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="${p}"></span><div class="fb"></div></div>`).join('')}<div class="row-actions"><button class="pill" data-act="drill" data-g="${g}">Check</button><button class="pill soft" data-act="drillshow" data-g="${g}">Show answers</button></div></div>`}
+function fillQs(id,list){return list.map((q,i)=>{const key=id+'-'+i,v=A[key]||'';return `<div class="q" data-q="${key}"><div class="line">${i+1}. ${q[0]} <input class="blank" value="${esc(v)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Answer ${i+1}"> ${q[1]} <span class="hint">(${q[2]})</span></div><div class="fb"></div></div>`}).join('')+`<div class="row-actions"><button class="pill" data-act="check" data-ex="${id}">Check answers</button><button class="pill soft" data-act="show" data-ex="${id}">Show answers</button></div>`}
+function choiceQs(id,list,opts,render){return list.map((q,i)=>{const key=id+'-'+i;return `<div class="q" data-c="${key}"><div class="line">${render(q,i)}</div><div class="choices">${opts.map(o=>`<button class="choice${A[key]===o?(o===q[2]?' ok':' no'):''}" data-pick="${o}" data-key="${key}" data-ans="${q[2]}">${o}</button>`).join('')}</div><div class="fb">${A[key]?(A[key]===q[2]?'<span class="ok">Σωστά! Correct.</span>':''):''}</div></div>`}).join('')}
+
+/* ---------- the four parts ---------- */
+const P1=`<p class="sub" style="margin:4px 0 6px">Present tense: how the ending changes for each person.</p>`
+ +sub('g1','Group 1 verbs: -ω','<div class="tip"><p>Endings: <b>-ω, -εις, -ει, -ουμε, -ετε, -ουν</b>. Tap a verb to see it in full.</p></div>'+verbGroup(G1,1))
+ +sub('g2','Group 2 verbs: -άω (red verbs)','<div class="tip"><p>Endings: <b>-άω, -άς, -άει / -ά, -άμε, -άτε, -ούν</b>. Tap a verb to see it in full.</p></div>'+verbGroup(G2,2))
+ +sub('ex1','Exercise 1: complete the sentences','<p class="sub">Write the correct form of the verb in brackets. Accents don\'t count against you.</p>'+fillQs('ex1',EX1))
+ +sub('ex2','Exercise 2: mixed verb practice','<p class="sub">Choose the correct form of the verb in brackets.</p>'+fillQs('ex2',EX2));
+const P2=`<div class="tip"><p>Learn every place <b>with its article</b>: <span class="gr" style="color:var(--m)">ο</span> masculine, <span class="gr" style="color:var(--f)">η</span> feminine, <span class="gr" style="color:var(--n)">το</span> neuter.</p></div>`
+ +sub('pl','Places and their articles',`<div class="places">${['m','f','n'].map(g=>`<div class="gcol ${g}"><h4>${{m:'Masculine – ο',f:'Feminine – η',n:'Neuter – το'}[g]}</h4>${PL[g].map(p=>`<div class="place"><div><span class="gr"><span class="art">${ART[g]}</span> ${p[0]}</span><small>${p[1]}</small></div>${sp(ART[g]+' '+p[0])}</div>`).join('')}</div>`).join('')}</div>`)
+ +sub('game','Game: ο, η or το?',`<div class="game"><p class="sub" style="margin:0">Which article goes with this place?</p><div class="word" id="gw"></div><div class="sub" id="ge" style="margin:0"></div><div class="choices">${['ο','η','το'].map(a=>`<button class="choice" data-art="${a}">${a}</button>`).join('')}</div><p class="fb" id="gfb"></p><p class="score" id="gs"></p></div>`);
+const P3=sub('rule','Πηγαίνω or Είμαι?',`<div class="tip"><p><b class="gr">Πηγαίνω</b> = I go / I am going (movement).</p><p><b class="gr">Είμαι</b> = I am (location).</p><p>Use <b class="gr">σε</b> before the place in both cases. The verb tells you whether you are going somewhere or are already there.</p></div>`)
+ +sub('se','σε + article becomes one word',`<div class="formula"><b>σε + το</b><span class="eq">→ στο</span><span class="gr">στο σχολείο ${sp('στο σχολείο')}</span><b>σε + την</b><span class="eq">→ στην</span><span class="gr">στην τράπεζα ${sp('στην τράπεζα')}</span><b>σε + τον</b><span class="eq">→ στον</span><span class="gr">στον κινηματογράφο ${sp('στον κινηματογράφο')}</span></div><div class="warn"><b>Important:</b> keep the final <b>-ν</b> in <b class="gr">στον</b>. It comes from τον: σε + τον = στον. The form στο comes from σε + το.</div>`)
+ +sub('exs','Examples',[['Πηγαίνω στην τράπεζα.','I am going to the bank.'],['Είμαι στην τράπεζα.','I am at the bank.'],['Πηγαίνω στο πάρκο.','I am going to the park.'],['Είμαι στο πάρκο.','I am at the park.']].map(x=>`<div class="ex"><div><div class="gr">${x[0]}</div><div class="e">${x[1]}</div></div>${sp(x[0])}</div>`).join(''));
+const P4=sub('ex3','Exercise 3: Πηγαίνω or Είμαι?','<p class="sub">Choose using the English translation.</p>'+choiceQs('ex3',EX3,['Πηγαίνω','Είμαι'],(q,i)=>`${i+1}. ______ <span class="gr">${q[0]}</span> <span class="hint">(${q[1]})</span>`))
+ +sub('ex4','Exercise 4: στο, στην or στον?','<p class="sub">Look at the article of each place. Part 2 has the list.</p>'+choiceQs('ex4',EX4,['στο','στην','στον'],(q,i)=>`${i+1}. <span class="gr">${q[0]} ______ ${q[1]}</span>`))
+ +sub('ex5','Exercise 5: speaking',`<p class="sub">Say your answer out loud first, then write it. Use places from Part 2. Tap Check for feedback.</p>${EX5.map((q,i)=>`<div class="q" data-s="ex5-${i}" data-mode="${q[2]}"><div class="line">${i+1}. <span class="gr">${q[0]}</span> ${sp(q[0])} <span class="hint">(${q[1]})</span></div><textarea aria-label="Your answer" placeholder="${['Πηγαίνω στ…','Είμαι στ…','Μένω στ…'][i]}">${esc(A['ex5-'+i]||'')}</textarea><div class="fb"></div></div>`).join('')}`)
+ +sub('own','Write two sentences of your own',`${[['own-0','Πηγαίνω','go'],['own-1','Είμαι','at']].map(([k,st,m],i)=>`<div class="q" data-s="${k}" data-mode="${m}"><div class="line">${i+1}. <span class="gr">${st} …</span></div><textarea aria-label="Sentence ${i+1}" placeholder="${st} στ…">${esc(A[k]||st+' ')}</textarea><div class="fb"></div></div>`).join('')}<div class="row-actions"><button class="pill" data-act="checks">Check my sentences</button></div>`);
+$('#parts').innerHTML=part('p1',1,'Present tense verbs','Group 1 and Group 2 · Exercises 1 and 2',P1)+part('p2',2,'Places & articles','ο, η, το · a quick article game',P2)+part('p3',3,'Going to vs being at','Πηγαίνω, Είμαι and σε + article',P3)+part('p4',4,'Practice','Exercises 3, 4 and 5 · your own sentences',P4);
+
+/* ---------- checking ---------- */
+const okAns=(val,ans)=>ans.some(a=>norm(a)===norm(val));
+function checkFill(ex,reveal){const list=ex==='ex1'?EX1:EX2;let right=0;
+ list.forEach((q,i)=>{const box=document.querySelector(`[data-q="${ex}-${i}"]`),inp=box.querySelector('input'),fb=box.querySelector('.fb');
+  if(reveal&&!okAns(inp.value,q[3])){inp.value=q[3][0];A['rev-'+ex+'-'+i]=1}
+  A[ex+'-'+i]=inp.value;const v=inp.value.trim();box.classList.remove('ok','no');
+  if(!v){fb.className='fb';fb.textContent='';return}
+  if(okAns(v,q[3])){right++;box.classList.add('ok');fb.className='fb ok';fb.textContent=reveal?'Answer: '+q[3].join(' / '):'Σωστά! Correct.'}
+  else{box.classList.add('no');fb.className='fb no';fb.textContent='Not yet. Hint: '+q[4]}});
+ A['score-'+ex]=reveal?A['score-'+ex]||0:right;save();badges()}
+function checkDrill(g,reveal){const v=A['v'+g]||(g===1?G1:G2)[0][0],forms=conj(v,g).map(c=>c[0]+c[1]),st=v.slice(0,g===1?-1:-2),alt=g===1?ALT1:ALT2;
+ document.querySelectorAll(`[data-drill="${g}"]`).forEach(box=>{const i=+box.dataset.i,inp=box.querySelector('input'),fb=box.querySelector('.fb');
+  if(reveal)inp.value=forms[i];const ok=[forms[i],...(alt[i]||[]).map(e=>st+e)];box.classList.remove('ok','no');
+  if(!inp.value.trim()){fb.className='fb';fb.textContent='';return}
+  if(okAns(inp.value,ok)){box.classList.add('ok');fb.className='fb ok';fb.textContent=reveal?'':'Σωστά!'}else{box.classList.add('no');fb.className='fb no';fb.textContent='Ending for '+PRON[i]+': -'+(g===1?END1:END2)[i]}})}
+function findPlace(n){for(const p of ALLPL){const stem=p.g==='m'?norm(p.w).slice(0,-2):norm(p.w);const re=new RegExp('(^| )(στον|στην|στη|στο|σε|στ)? ?(το|τον|την|η|ο)? ?'+stem);const m=n.match(re);if(m)return {p,prep:m[2]||'',art:m[3]||''}}return null}
+function checkSentence(txt,mode){const n=norm(txt);if(!n)return null;const msgs=[];let good=true;
+ const verb=/πηγαιν/.test(n)?'go':/ειμαι/.test(n)?'at':/μενω/.test(n)?'live':'';
+ if(mode&&verb!==mode){good=false;msgs.push({go:'This question is about where you are going: start with Πηγαίνω.',at:'This question is about where you are now: start with Είμαι.',live:'Answer with Μένω (I live).'}[mode])}
+ const f=findPlace(n);
+ if(!f){if(mode==='live'&&/(^| )στ(ην|ον|ο|η)? /.test(n))msgs.push('Nice! Check that στο / στην / στον matches your town\'s article.');else{good=false;msgs.push('Add a place from Part 2, e.g. '+(verb==='at'?'Είμαι':verb==='live'?'Μένω':'Πηγαίνω')+' στο πάρκο.')}}
+ else{const want=STO[f.p.g];
+  if(f.prep===want||(f.p.g==='f'&&f.prep==='στη'))msgs.push(`${want} ${f.p.acc} is right: ${ART[f.p.g]} ${f.p.w} → ${want}.`);
+  else if(f.art&&f.prep==='σε'){good=false;msgs.push(`Join them into one word: σε + ${f.p.g==='n'?'το':f.p.g==='f'?'την':'τον'} = ${want}.`)}
+  else{good=false;msgs.push(`Use ${want}: ${ART[f.p.g]} ${f.p.w} → ${want} ${f.p.acc}.`)}}
+ return {good,msgs}}
+function runSentences(sel){document.querySelectorAll(sel).forEach(box=>{const k=box.dataset.s,ta=box.querySelector('textarea'),fb=box.querySelector('.fb');A[k]=ta.value;
+ const r=checkSentence(ta.value,box.dataset.mode);if(!r||norm(ta.value).split(' ').length<2){fb.className='fb';fb.textContent='';return}
+ fb.className='fb '+(r.good?'ok':'no');fb.innerHTML=(r.good?'Μπράβο! ':'')+r.msgs.map(esc).join(' ')});save()}
+
+/* ---------- article game ---------- */
+let gp=null,gsc=A.game||{r:0,t:0};
+function nextWord(){let p;do{p=ALLPL[Math.floor(Math.random()*ALLPL.length)]}while(gp&&p===gp&&ALLPL.length>1);gp=p;
+ $('#gw').textContent=p.w;$('#ge').textContent=p.e;$('#gfb').textContent='';document.querySelectorAll('[data-art]').forEach(b=>{b.className='choice';b.disabled=false});
+ $('#gs').textContent=gsc.t?`${gsc.r} of ${gsc.t} right`:''}
+
+/* ---------- progress badges ---------- */
+function badges(){const c=(ex,list,fn)=>list.filter((q,i)=>fn(q,i,A[ex+'-'+i])).length;
+ const p1=c('ex1',EX1,(q,i,v)=>v&&okAns(v,q[3])&&!A['rev-ex1-'+i])+c('ex2',EX2,(q,i,v)=>v&&okAns(v,q[3])&&!A['rev-ex2-'+i]);
+ const p4=c('ex3',EX3,(q,i,v)=>v===q[2])+c('ex4',EX4,(q,i,v)=>v===q[2]);
+ const set=(id,txt,done)=>{const b=$('#badge-'+id);b.textContent=txt;b.classList.toggle('done',done)};
+ set('p1',p1+' / 12',p1===12);set('p2',gsc.t?gsc.r+' / '+gsc.t:'Vocabulary',gsc.r>=10);set('p3','Rules',false);set('p4',p4+' / 10',p4===10)}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.say){say(d.say);return}
+ if(d.verb){const g=+d.g;A['v'+g]=d.verb;save();b.parentElement.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b));$('#conj'+g).innerHTML=conjTable(d.verb,g);$('#drillv'+g).textContent=d.verb;document.querySelectorAll(`[data-drill="${g}"]`).forEach(x=>{x.classList.remove('ok','no');x.querySelector('input').value='';x.querySelector('.fb').textContent=''});return}
+ if(d.pick){const key=d.key,box=b.closest('.q'),fb=box.querySelector('.fb');A[key]=d.pick;save();box.querySelectorAll('.choice').forEach(c=>c.className='choice'+(c===b?(d.pick===d.ans?' ok':' no'):''));
+  fb.innerHTML=d.pick===d.ans?'<span class="ok">Σωστά! Correct.</span>':'<span class="no">Not quite. '+(key.startsWith('ex3')?'Going somewhere = Πηγαίνω; already there = Είμαι.':'Check the article: ο → στον, η → στην, το → στο.')+'</span>';badges();return}
+ if(d.art){if(!gp)return;const ok=d.art===ART[gp.g];gsc.t++;if(ok)gsc.r++;A.game=gsc;save();
+  document.querySelectorAll('[data-art]').forEach(x=>{x.disabled=true;if(x.dataset.art===ART[gp.g])x.className='choice ok';else if(x===b)x.className='choice no'});
+  $('#gfb').innerHTML=ok?`<span class="ok">Σωστά! ${ART[gp.g]} ${gp.w}</span>`:`<span class="no">It's ${ART[gp.g]} ${gp.w}</span>`;say(ART[gp.g]+' '+gp.w);badges();setTimeout(nextWord,1300);return}
+ const a=d.act;
+ if(a==='check'){checkFill(d.ex,false);return}
+ if(a==='show'){checkFill(d.ex,true);return}
+ if(a==='drill'){checkDrill(+d.g,false);return}
+ if(a==='drillshow'){checkDrill(+d.g,true);return}
+ if(a==='checks'){runSentences('[data-s^="own"]');return}
+});
+document.addEventListener('input',e=>{const t=e.target;
+ if(t.id==='nm'||t.id==='dt'){A[t.id]=t.value;save();return}
+ const q=t.closest('[data-q]');if(q){A[q.dataset.q]=t.value;delete A['rev-'+q.dataset.q];save();return}
+ const s=t.closest('[data-s]');if(s){A[s.dataset.s]=t.value;save()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input.blank')){const q=e.target.closest('[data-q]');if(q)checkFill(q.dataset.q.split('-')[0],false);const dr=e.target.closest('[data-drill]');if(dr)checkDrill(+dr.dataset.drill,false)}});
+document.addEventListener('focusout',e=>{const s=e.target.closest&&e.target.closest('[data-s^="ex5"]');if(s)runSentences('[data-s="'+s.dataset.s+'"]')});
+document.querySelectorAll('details').forEach(el=>el.addEventListener('toggle',()=>{A.open=A.open||{};A.open[el.dataset.id]=el.open;save();syncToggle()}));
+function syncToggle(){const all=[...document.querySelectorAll('details.part')];$('#toggleAll').textContent=all.every(x=>x.open)?'Close all parts':'Open all parts'}
+$('#toggleAll').addEventListener('click',()=>{const all=[...document.querySelectorAll('details.part')],open=!all.every(x=>x.open);all.forEach(x=>x.open=open)});
+$('#copyAll').addEventListener('click',()=>{const L=[];L.push('Greekify me · Verbs & Places','Name: '+(A.nm||''),'Date: '+(A.dt||''),'');
+ L.push('Exercise 1');EX1.forEach((q,i)=>L.push(`${i+1}. ${q[0]} ${A['ex1-'+i]||'____'} ${q[1]}`));
+ L.push('','Exercise 2');EX2.forEach((q,i)=>L.push(`${i+1}. ${q[0]} ${A['ex2-'+i]||'____'} ${q[1]}`));
+ L.push('','Exercise 3');EX3.forEach((q,i)=>L.push(`${i+1}. ${A['ex3-'+i]||'____'} ${q[0]}`));
+ L.push('','Exercise 4');EX4.forEach((q,i)=>L.push(`${i+1}. ${q[0]} ${A['ex4-'+i]||'____'} ${q[1]}`));
+ L.push('','Exercise 5');EX5.forEach((q,i)=>L.push(`${i+1}. ${q[0]} ${A['ex5-'+i]||''}`));
+ L.push('','My sentences','1. '+(A['own-0']||''),'2. '+(A['own-1']||''));
+ const txt=L.join('\n');try{navigator.clipboard.writeText(txt).then(()=>toast('Copied. Paste it into a message to your teacher.'),()=>toast('Copy was blocked here'))}catch(err){toast('Copy was blocked here')}});
+
+/* ---------- start ---------- */
+$('#nm').value=A.nm||'';$('#dt').value=A.dt||'';
+['ex1','ex2'].forEach(ex=>{if((ex==='ex1'?EX1:EX2).some((q,i)=>A[ex+'-'+i]))checkFill(ex,false)});
+runSentences('[data-s]');nextWord();badges();syncToggle();
+if(window.claude&&claude.use)claude.use('tts').then(t=>{if(t)ttsCap=t}).catch(()=>{});
+}
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}</script>
+</body>
+</html>
